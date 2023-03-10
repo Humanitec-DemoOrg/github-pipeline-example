@@ -3,7 +3,7 @@
 ## Background:
 This repository contains a pipeline example, how to define resources, applications, and then deploy workloads to both `dev` and `prod` environments.
 
-The environment types must be defined, and they have to be named `development` (auto created by default), and `production` (can be edited via Terraform Variables`.
+The environment types must be defined, and they have to be named `development` (auto created by default), and `production` (can be edited via Terraform Variables).
 
 ## Requeriments:
 - Terraform Cloud Account (free tier is OK), workspace, organization and token
