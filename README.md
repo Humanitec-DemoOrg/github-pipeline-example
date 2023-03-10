@@ -4,7 +4,7 @@
 This repository contains a pipeline example, how todefine resources, applications, and then deploy workloads to both `dev` and `prod` environments. The environment types must be defined, and they have to be named `development` (auto created by default), and `production`.
 
 ## Requeriments:
-- Terraform Cloud Account (free tier is OK), workspace, organization and token (Terraform Cloud is used for the Humanitec Resource Definitons state storage only)
+- Terraform Cloud Account (free tier is OK), workspace, organization and token (Terraform Cloud is used for the Humanitec Resource Definitons state storage only). Configure your workspace `Execution Mode` to `Local`.
 - Humanitec Account, organization and token
 - Github Account
 
