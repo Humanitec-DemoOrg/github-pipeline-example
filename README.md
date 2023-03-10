@@ -7,7 +7,7 @@ The environment types must be defined, and they have to be named `development` (
 
 ## Requeriments:
 - Terraform Cloud Account (free tier is OK), workspace, organization and token
-    - Terraform Cloud is used for the Humanitec Resource Definitons state storage only). Configure your workspace `Execution Mode` to `Local`.
+    - Terraform Cloud is used for the Humanitec Resource Definitons state storage only. Configure your workspace `Execution Mode` to `Local`. Optionally, you could use another sort of storage, such as an S3 bucket. You must configure your IAM role and credentials accordingly.
 - Humanitec Account, organization and token
 - Github Account
 
