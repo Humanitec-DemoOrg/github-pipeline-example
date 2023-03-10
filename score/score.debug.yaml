@@ -1,0 +1,20 @@
+---
+apiVersion: score.dev/v1b1
+
+metadata:
+  name: debug
+
+containers:
+  backend:
+    image: ubuntu:latest
+    command: ["/bin/bash"]
+    args: ["-c", "while true; do printenv && echo \"***\"; sleep 120; done"]
+    variables:
+      ZZZ_PRODUCTS_DB: mysql://${shared.products.username}:${shared.products.password}@${shared.products.host}:${shared.products.port}/${shared.products.name}
+      ZZZ_ANALYTICS_DB: postgresql://${shared.analytics.username}:${shared.analytics.password}@${shared.analytics.host}:${shared.analytics.port}/${shared.analytics.name}
+
+resources:
+  "analytics":
+    type: postgres
+  "products":
+    type: mariadb

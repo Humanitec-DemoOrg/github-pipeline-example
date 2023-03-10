@@ -1,0 +1,15 @@
+terraform {
+  cloud {
+    organization = "my-org"
+    workspaces {
+      name = "my-workspace"
+    }
+  }
+}
+
+# terraform state rm humanitec_application.app
+# terraform state rm humanitec_resource_definition.mariadb_dev
+# terraform state rm humanitec_resource_definition.mariadb_prod
+# terraform state rm humanitec_resource_definition.postgres_prod
+# terraform state rm humanitec_resource_definition.postgres_dev
+# terraform state rm humanitec_resource_definition.namespace

@@ -1,0 +1,15 @@
+---
+apiVersion: score.dev/v1b1
+
+metadata:
+  name: frontend
+
+service:
+  ports:
+    p80:
+      port: 80
+      targetPort: 80
+
+containers:
+  frontend:
+    image: nginxdemos/hello:latest
