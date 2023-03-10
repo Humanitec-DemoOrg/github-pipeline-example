@@ -1,0 +1,8 @@
+HUMANITEC_APP = "humanidemo"
+
+HUMANITEC_ORG   = ""
+HUMANITEC_TOKEN = ""
+HUMANITEC_URL   = "https://api.humanitec.io"
+
+dev_env  = "development"
+prod_env = "production"
