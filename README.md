@@ -1,12 +1,12 @@
 # humanitec-pipeline-example
 
 ## Requeriments:
-- Terraform Cloud Account, workspace, organization and token (for state storare only)
+- Terraform Cloud Account (free tier is OK), workspace, organization and token (for state storare only)
 - Humanitec Account, organization and token
 - Github Account
 
 ### Steps:
-- Create a repository, add an environment `development`
+- Create a GitHub repository, add an environment `development`
 - Add the following variables:
     - HUMANITEC_APP
     - HUMANITEC_ORG 
