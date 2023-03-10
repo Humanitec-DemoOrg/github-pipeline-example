@@ -1,7 +1,7 @@
 resource "humanitec_resource_definition" "postgres_dev" {
   driver_type = "humanitec/template"
-  id          = "${var.app_name}-postgres-dev"
-  name        = "${var.app_name}-postgres-dev"
+  id          = "${var.HUMANITEC_APP}-postgres-dev"
+  name        = "${var.HUMANITEC_APP}-postgres-dev"
   type        = "postgres"
 
   driver_inputs = {
@@ -42,8 +42,8 @@ EOL
 
 resource "humanitec_resource_definition" "mariadb_dev" {
   driver_type = "humanitec/template"
-  id          = "${var.app_name}-mariadb-dev"
-  name        = "${var.app_name}-mariadb-dev"
+  id          = "${var.HUMANITEC_APP}-mariadb-dev"
+  name        = "${var.HUMANITEC_APP}-mariadb-dev"
   type        = "mariadb"
 
   driver_inputs = {

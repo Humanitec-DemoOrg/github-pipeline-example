@@ -20,41 +20,52 @@ jobs:
       - uses: actions/checkout@v3
 
       # prep work
-      - wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
-      - echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
-      - sudo apt update && sudo apt install terraform -y
-      - mkdir ~/.bin
-      - curl -L  https://github.com/a8m/envsubst/releases/download/v1.4.2/envsubst-Linux-x86_64 -o ~/.bin/envsubst
-      - curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 -o ~/.bin/jq
-      - curl -L https://github.com/score-spec/score-humanitec/releases/download/0.3.0-rc1/score-humanitec_0.3.0-rc1_linux_amd64.tar.gz -o /tmp/score.tar.gz
-      - tar xvzf /tmp/score.tar.gz -C /tmp && cp /tmp/score-humanitec ~/.bin
-      - chmod +x ~/.bin/*
+      - run: |
+          ls
+          pwd
+          echo $HOME
+          mkdir $HOME/.bin
+          echo $PATH
+          echo $GITHUB_PATH
+          echo "${HOME}/.bin" >> $GITHUB_PATH
+          echo $PATH
+          echo $GITHUB_PATH
+      - run: |
+          curl -L https://github.com/a8m/envsubst/releases/download/v1.4.2/envsubst-Linux-x86_64 -o ~/.bin/envsubst
+          curl -L https://github.com/score-spec/score-humanitec/releases/download/0.3.0-rc1/score-humanitec_0.3.0-rc1_linux_amd64.tar.gz -o /tmp/score.tar.gz
+          tar xvzf /tmp/score.tar.gz -C /tmp && cp /tmp/score-humanitec ~/.bin
+          curl -L https://releases.hashicorp.com/terraform/1.4.0/terraform_1.4.0_linux_amd64.zip -o /tmp/terraform.zip
+          unzip /tmp/terraform.zip && mv terraform ~/.bin
+          chmod +x ~/.bin
 
-      - terraform --version
-      - jq --version
-      - score-humanitec --version
+          terraform --version
+          jq --version
+          score-humanitec --version
 
       # Humanitec resource definitions, state stored in Terraform Cloud
-      - cd humanitec-resource-definitions-terraform
-      - export TF_VAR_HUMANITEC_ORG=$HUMANITEC_ORG
-      - export TF_VAR_HUMANITEC_TOKEN=$HUMANITEC_TOKEN
-      - export TF_VAR_HUMANITEC_APP=$HUMANITEC_APP
-      - chmod +x tfcloud.sh && ./tfcloud.sh
-      - terraform init -upgrade
-      - terraform plan
-      - terraform apply -auto-approve
-      - cd ..
-
+      - run: |
+          cd humanitec-resource-definitions-terraform
+          pwd && ls
+          export TF_VAR_HUMANITEC_ORG=$HUMANITEC_ORG
+          export TF_VAR_HUMANITEC_TOKEN=$HUMANITEC_TOKEN
+          export TF_VAR_HUMANITEC_APP=$HUMANITEC_APP
+          chmod +x tfcloud.sh && ./tfcloud.sh
+          terraform init -upgrade
+          terraform plan
+          terraform apply -auto-approve
+    
       # docker, and set the $IMAGE_NAME and use overrides later
 
       # dev env
-      - cd score
-      - chmod +x deploy_dev.sh
-
-      - IMAGE_NAME="nginxdemos/hello:latest" envsubst < overrides.debug.yaml.example > overrides.debug.yaml
-      - HUMANITEC_ENVIRONMENT=development ./deploy_dev.sh
+      - run: |
+          cd score
+          chmod +x deploy_dev.sh
+          IMAGE_NAME="nginxdemos/hello:latest" envsubst < overrides.debug.yaml.example > overrides.debug.yaml
+          HUMANITEC_ENVIRONMENT=development ./deploy_dev.sh
 
       # prod env
-      - chmod +x deploy_prod.sh
-      - IMAGE_NAME="nginxdemos/hello:latest" envsubst < overrides.debug.yaml.example > overrides.debug.yaml
-      - HUMANITEC_ENVIRONMENT=production HUMANITEC_FROM_ENVIRONMENT=development ./deploy_prod.sh
+      - run: |
+          cd score
+          chmod +x deploy_prod.sh
+          IMAGE_NAME="nginxdemos/hello:latest" envsubst < overrides.debug.yaml.example > overrides.debug.yaml
+          HUMANITEC_ENVIRONMENT=production HUMANITEC_FROM_ENVIRONMENT=development ./deploy_prod.sh

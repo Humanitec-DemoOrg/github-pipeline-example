@@ -1,6 +1,6 @@
 resource "humanitec_resource_definition" "namespace" {
-  id          = "${var.app_name}-namespace"
-  name        = "${var.app_name}-namespace"
+  id          = "${var.HUMANITEC_APP}-namespace"
+  name        = "${var.HUMANITEC_APP}-namespace"
   type        = "k8s-namespace"
   driver_type = "humanitec/template"
 

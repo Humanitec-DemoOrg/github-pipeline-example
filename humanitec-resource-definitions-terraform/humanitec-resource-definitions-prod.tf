@@ -1,7 +1,7 @@
 resource "humanitec_resource_definition" "postgres_prod" {
   driver_type = "humanitec/static"
-  id          = "${var.app_name}-postgres-prod"
-  name        = "${var.app_name}-postgres-prod"
+  id          = "${var.HUMANITEC_APP}-postgres-prod"
+  name        = "${var.HUMANITEC_APP}-postgres-prod"
   type        = "postgres"
 
   driver_inputs = {
@@ -27,8 +27,8 @@ resource "humanitec_resource_definition" "postgres_prod" {
 
 resource "humanitec_resource_definition" "mariadb_prod" {
   driver_type = "humanitec/static"
-  id          = "${var.app_name}-mariadb-prod"
-  name        = "${var.app_name}-mariadb-prod"
+  id          = "${var.HUMANITEC_APP}-mariadb-prod"
+  name        = "${var.HUMANITEC_APP}-mariadb-prod"
   type        = "mariadb"
 
   driver_inputs = {
