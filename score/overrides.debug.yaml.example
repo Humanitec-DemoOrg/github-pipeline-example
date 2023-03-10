@@ -1,0 +1,6 @@
+---
+containers:
+  backend:
+    image: $IMAGE_NAME
+    command:
+    args:
