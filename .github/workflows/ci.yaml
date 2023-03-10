@@ -1,7 +1,11 @@
 name: CI
 
-on: [push]
-
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - dev
+  pull_request:
 jobs:
   test:
     runs-on: ubuntu-latest
