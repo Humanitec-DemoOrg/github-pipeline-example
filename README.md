@@ -20,4 +20,5 @@ The environment types must be defined, and they have to be named `development` (
     - TFC_ORG
     - TFC_TOKEN
     - TFC_WORKSPACE
-- Make sure your app name is lowercase, and only dashes ex `demo-app`. Deploy the application, within `.github/workflows/ci.yaml` you can specificy the brand and way that the pipeline can be triggered, by default it will try to deploy when the branch is named `dev`.
+- Make sure your app name is lowercase, and only dashes ex `demo-app`.
+- Deploy the application, within `.github/workflows/ci.yaml` you can specificy the brand and way that the pipeline can be triggered, by default it will try to deploy when the branch is named `dev`.
