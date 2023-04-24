@@ -10,9 +10,6 @@ humanitec_wait_for_deployment () {
         if [[ $DEPLOYMENT_STATUS == "failed" ]]
         then
             echo "DEPLOYMENT ERROR: $HUMANITEC_ORG/$HUMANITEC_APP/$HUMANITEC_ENVIRONMENT/$WORKLOAD/$DEPLOYMENT_ID"
-       
-            humanitec_rollback
-
             exit 1
         fi
         if [[ $DEPLOYMENT_STATUS == "succeeded" ]]
@@ -23,33 +20,6 @@ humanitec_wait_for_deployment () {
         fi
         echo $DEPLOYMENT_STATUS
     done
-}
-
-humanitec_rollback() {
-    echo "Trying to rollback to a successful deployment..."
-
-    curl $HUMANITEC_URL/orgs/$HUMANITEC_ORG/apps/$HUMANITEC_APP/envs/$HUMANITEC_ENVIRONMENT/deploys -H "Authorization: Bearer $HUMANITEC_TOKEN" -o /tmp/deploys.json -s -k
-
-    DEPLOYMENT_ID=`cat /tmp/deploys.json | jq -c 'map( select( .status == "succeeded" ) ) | .[0]["id"]' -r`
-    DELTA_ID=`cat /tmp/deploys.json | jq -c 'map( select( .status == "succeeded" ) ) | .[0]["delta_id"]' -r`
-    COMMENT=`cat /tmp/deploys.json | jq -c 'map( select( .status == "succeeded" ) ) | .[0]["comment"]' -r`
-    CREATED_AT=`cat /tmp/deploys.json | jq -c 'map( select( .status == "succeeded" ) ) | .[0]["created_at"]' -r`
-    ENV_ID=`cat /tmp/deploys.json | jq -c 'map( select( .status == "succeeded" ) ) | .[0]["env_id"]' -r`
-
-    if [[ $DEPLOYMENT_ID  == "null" ]]
-    then
-        echo "Could not found a successful deployment - doing nothing."
-    else
-        echo "Found a successful deployment: $DEPLOYMENT_ID, rollback requested."
-cat <<-EOF > /tmp/rollback.json
-{
-"comment": "Rollback to $DEPLOYMENT_ID, $COMMENT, $CREATED_AT",
-"delta_id": "$DELTA_ID"
-}
-EOF
-        curl -X POST $HUMANITEC_URL/orgs/$HUMANITEC_ORG/apps/$HUMANITEC_APP/envs/$HUMANITEC_ENVIRONMENT/deploys -H "Authorization: Bearer $HUMANITEC_TOKEN"  -d @/tmp/rollback.json -s -k
-    fi
-
 }
 
 humanitec_create_app_environment () {
