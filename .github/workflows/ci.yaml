@@ -70,8 +70,6 @@ jobs:
           # IMAGE_NAME="nginxdemos/hello:latest" envsubst < overrides.debug.yaml.example > overrides.debug.yaml
           envsubst < overrides.debug.yaml.example > overrides.debug.yaml
           HUMANITEC_ENVIRONMENT=development ./deploy.sh
-      - name: Get diff
-        id: vars
-        run: echo ::set-output name=diff::$(cat /tmp/diff.txt)
-      - name: Output diff
-        run: echo ${{ steps.vars.outputs.diff }}
+
+      - name: Diff
+        run: echo "diff=$(cat /tmp/diff.txt)" >> $GITHUB_OUTPUT
