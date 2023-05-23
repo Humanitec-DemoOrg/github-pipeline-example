@@ -11,6 +11,15 @@ CURRENT_SET_ID="$(curl -s \
 echo $CURRENT_SET_ID
 
 # # Apply the delta from the Score file to that deployment set returning the new set ID
+
+curl -s \
+  -X POST \
+  "https://api.humanitec.io/orgs/${HUMANITEC_ORG}/apps/${HUMANITEC_APP}/sets/${CURRENT_SET_ID}" \
+  -H "Authorization: Bearer ${HUMANITEC_TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d "${DELTA}"
+
+  
 NEW_SET_ID="$(curl -s \
   -X POST \
   "https://api.humanitec.io/orgs/${HUMANITEC_ORG}/apps/${HUMANITEC_APP}/sets/${CURRENT_SET_ID}" \
