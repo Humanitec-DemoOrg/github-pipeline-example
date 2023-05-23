@@ -72,4 +72,4 @@ jobs:
           HUMANITEC_ENVIRONMENT=development ./deploy.sh
 
       - name: Diff
-        run: echo "xxx" >> /tmp/a.txt && cat /tmp/a.txt
+        run: ls -alF /tmp
