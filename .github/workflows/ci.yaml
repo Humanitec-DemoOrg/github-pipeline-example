@@ -74,4 +74,7 @@ jobs:
           HUMANITEC_ENVIRONMENT=development ./deploy.sh
 
       - name: Diff
-        run: cat /tmp/diff.txt
+        run: |
+          cat /tmp/new_delta.txt
+          cat /tmp/delta.txt
+          cat /tmp/diff.txt
