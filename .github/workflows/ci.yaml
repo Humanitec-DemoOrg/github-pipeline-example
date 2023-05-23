@@ -36,9 +36,9 @@ jobs:
           echo $GITHUB_PATH
       - run: |
           curl -L https://github.com/a8m/envsubst/releases/download/v1.4.2/envsubst-Linux-x86_64 -o ~/.bin/envsubst
-          curl -L https://github.com/score-spec/score-humanitec/releases/download/0.3.0-rc1/score-humanitec_0.3.0-rc1_linux_amd64.tar.gz -o /tmp/score.tar.gz
+          curl -L https://github.com/score-spec/score-humanitec/releases/download/0.5.0/score-humanitec_0.5.0_linux_amd64.tar.gz -o /tmp/score.tar.gz
           tar xvzf /tmp/score.tar.gz -C /tmp && cp /tmp/score-humanitec ~/.bin
-          curl -L https://releases.hashicorp.com/terraform/1.4.0/terraform_1.4.0_linux_amd64.zip -o /tmp/terraform.zip
+          curl -L https://releases.hashicorp.com/terraform/1.4.6/terraform_1.4.6_linux_amd64.zip -o /tmp/terraform.zip
           unzip /tmp/terraform.zip && mv terraform ~/.bin
           chmod +x ~/.bin
 
@@ -66,10 +66,3 @@ jobs:
           chmod +x deploy_dev.sh
           IMAGE_NAME="nginxdemos/hello:latest" envsubst < overrides.debug.yaml.example > overrides.debug.yaml
           HUMANITEC_ENVIRONMENT=development ./deploy_dev.sh
-
-      # prod env
-      - run: |
-          cd score
-          chmod +x deploy_prod.sh
-          IMAGE_NAME="nginxdemos/hello:latest" envsubst < overrides.debug.yaml.example > overrides.debug.yaml
-          HUMANITEC_ENVIRONMENT=production HUMANITEC_FROM_ENVIRONMENT=development ./deploy_prod.sh
