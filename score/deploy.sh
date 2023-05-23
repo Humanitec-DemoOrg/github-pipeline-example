@@ -14,7 +14,20 @@ CURRENT_SET_ID="$(curl -s \
   "https://api.humanitec.io/orgs/${HUMANITEC_ORG}/apps/${HUMANITEC_APP}/envs/${HUMANITEC_ENVIRONMENT}" \
   -H "Authorization: Bearer ${HUMANITEC_TOKEN}" | jq -r .last_deploy.set_id)"
 
+CURRENT_DELTA_ID="$(curl -s \
+  "https://api.humanitec.io/orgs/${HUMANITEC_ORG}/apps/${HUMANITEC_APP}/envs/${HUMANITEC_ENVIRONMENT}" \
+  -H "Authorization: Bearer ${HUMANITEC_TOKEN}" | jq -r .last_deploy.delta_id)"
+
+  
+echo "Current SET ID"
 echo $CURRENT_SET_ID
+echo "Current DELTA ID"
+echo $CURRENT_DELTA_ID
+
+curl -s \
+  "https://api.humanitec.io/orgs/${HUMANITEC_ORG}/apps/${HUMANITEC_APP}/deltas/${CURRENT_DELTA_ID}" \
+  -H "Authorization: Bearer ${HUMANITEC_TOKEN}"
+
 
 # # Apply the delta from the Score file to that deployment set returning the new set ID
 
