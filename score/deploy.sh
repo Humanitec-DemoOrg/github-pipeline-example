@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
-export DELTA_ID=`score-humanitec delta --api-url $HUMANITEC_URL --token $HUMANITEC_TOKEN --org $HUMANITEC_ORG --app $HUMANITEC_APP --env $HUMANITEC_ENVIRONMENT -f score.debug.yaml --extensions extensions.debug.yaml --overrides overrides.debug.yaml | jq .id -r`
-echo $DELTA_ID
+export DELTA=`score-humanitec delta --api-url $HUMANITEC_URL --token $HUMANITEC_TOKEN --org $HUMANITEC_ORG --app $HUMANITEC_APP --env $HUMANITEC_ENVIRONMENT -f score.debug.yaml --extensions extensions.debug.yaml --overrides overrides.debug.yaml`
+echo $DELTA
 
 CURRENT_SET_ID="$(curl -s \
   "https://api.humanitec.io/orgs/${HUMANITEC_ORG}/apps/${HUMANITEC_APP}/envs/${HUMANITEC_ENVIRONMENT}" \
@@ -16,7 +16,7 @@ NEW_SET_ID="$(curl -s \
   "https://api.humanitec.io/orgs/${HUMANITEC_ORG}/apps/${HUMANITEC_APP}/sets/${CURRENT_SET_ID}" \
   -H "Authorization: Bearer ${HUMANITEC_TOKEN}" \
   -H "Content-Type: application/json" \
-  -d "${DELTA_ID}" | jq -r .)"
+  -d "${DELTA}" | jq -r .)"
 
 echo $NEW_SET_ID
 
