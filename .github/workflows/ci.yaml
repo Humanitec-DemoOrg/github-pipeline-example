@@ -70,3 +70,4 @@ jobs:
           # IMAGE_NAME="nginxdemos/hello:latest" envsubst < overrides.debug.yaml.example > overrides.debug.yaml
           envsubst < overrides.debug.yaml.example > overrides.debug.yaml
           HUMANITEC_ENVIRONMENT=development ./deploy.sh
+          cat /tmp/diff.txt

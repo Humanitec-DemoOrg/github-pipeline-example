@@ -19,4 +19,4 @@ NEW_SET_ID="$(curl -s \
 curl -s \
   "https://api.humanitec.io/orgs/${HUMANITEC_ORG}/apps/${APP_ID}/sets/${NEW_SET_ID}/diff/${CURRENT_SET_ID}" \
   -H "Authorization: Bearer ${HUMANITEC_TOKEN}" \
-  -H "Content-Type: application/json" | jq
+  -H "Content-Type: application/json" | jq > /tmp/diff.txt
