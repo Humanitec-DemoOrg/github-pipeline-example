@@ -2,7 +2,13 @@
 set -e
 
 export DELTA=`score-humanitec delta --api-url $HUMANITEC_URL --token $HUMANITEC_TOKEN --org $HUMANITEC_ORG --app $HUMANITEC_APP --env $HUMANITEC_ENVIRONMENT -f score.debug.yaml --extensions extensions.debug.yaml --overrides overrides.debug.yaml | jq 'del(.metadata.url)'`
+echo "NEW DELTA"
 echo $DELTA
+
+echo "CURRENT SET"
+curl -s \
+  "https://api.humanitec.io/orgs/${HUMANITEC_ORG}/apps/${HUMANITEC_APP}/envs/${HUMANITEC_ENVIRONMENT}" \
+  -H "Authorization: Bearer ${HUMANITEC_TOKEN}"
 
 CURRENT_SET_ID="$(curl -s \
   "https://api.humanitec.io/orgs/${HUMANITEC_ORG}/apps/${HUMANITEC_APP}/envs/${HUMANITEC_ENVIRONMENT}" \
