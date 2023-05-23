@@ -72,4 +72,4 @@ jobs:
           HUMANITEC_ENVIRONMENT=development ./deploy.sh
 
       - name: Diff
-        run: echo "diff=$(cat /tmp/diff.txt)" >> $GITHUB_OUTPUT
+        run: echo "diff=xxx" >> $GITHUB_OUTPUT
