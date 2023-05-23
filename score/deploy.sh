@@ -21,8 +21,8 @@ NEW_SET_ID="$(curl -s \
 
 echo $NEW_SET_ID
 
-# # Diff the new to the current deployment set and output the result
-# curl -s \
-#   "https://api.humanitec.io/orgs/${HUMANITEC_ORG}/apps/${HUMANITEC_APP}/sets/${NEW_SET_ID}/diff/${CURRENT_SET_ID}" \
-#   -H "Authorization: Bearer ${HUMANITEC_TOKEN}" \
-#   -H "Content-Type: application/json" | jq > /tmp/diff.txt
+# Diff the new to the current deployment set and output the result
+curl -s \
+  "https://api.humanitec.io/orgs/${HUMANITEC_ORG}/apps/${HUMANITEC_APP}/sets/${NEW_SET_ID}/diff/${CURRENT_SET_ID}" \
+  -H "Authorization: Bearer ${HUMANITEC_TOKEN}" \
+  -H "Content-Type: application/json" | jq > /tmp/diff.txt
