@@ -13,7 +13,7 @@ NEW_SET_ID="$(curl -s \
   "https://api.humanitec.io/orgs/${HUMANITEC_ORG}/apps/${HUMANITEC_APP}/sets/${CURRENT_SET_ID}" \
   -H "Authorization: Bearer ${HUMANITEC_TOKEN}" \
   -H "Content-Type: application/json" \
-  -d "${DELTA}" | jq -r .)"
+  -d "${DELTA_ID}" | jq -r .)"
 
 # Diff the new to the current deployment set and output the result
 curl -s \
