@@ -68,6 +68,7 @@ jobs:
           cd score
           chmod +x deploy.sh
           # IMAGE_NAME="nginxdemos/hello:latest" envsubst < overrides.debug.yaml.example > overrides.debug.yaml
+          echo $IMAGE_NAME
           envsubst < overrides.debug.yaml.example > overrides.debug.yaml
           HUMANITEC_ENVIRONMENT=development ./deploy.sh
 
