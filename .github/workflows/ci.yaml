@@ -75,6 +75,7 @@ jobs:
           HUMANITEC_ENVIRONMENT=development ./deploy.sh
 
       - name: Diff
+        id: diff
         run: |
           echo "New DELTA"
           cat /tmp/new_delta.txt
@@ -82,9 +83,13 @@ jobs:
           cat /tmp/delta.txt
           echo "Diff"
           cat /tmp/diff.txt
+
+          echo "diff<<$EOF" >> "$GITHUB_OUTPUT"
+          cat /tmp/diff.txt >> "$GITHUB_OUTPUT"
+          echo "$EOF" >> "$GITHUB_OUTPUT"
       - uses: mshick/add-pr-comment@v2
         with:
           message: |
             ```json
-            {{ $IMAGE_NAME }}
+            ${{ steps.diff.outputs.diff }}
             ```
