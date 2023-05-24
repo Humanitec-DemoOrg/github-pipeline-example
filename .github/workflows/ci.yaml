@@ -81,3 +81,4 @@ jobs:
           cat /tmp/delta.txt
           echo "Diff"
           cat /tmp/diff.txt
+          diff /tmp/delta.txt /tmp/new_delta.txt
