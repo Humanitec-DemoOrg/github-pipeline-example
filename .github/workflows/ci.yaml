@@ -74,7 +74,8 @@ jobs:
           envsubst < overrides.debug.yaml.example > overrides.debug.yaml
           HUMANITEC_ENVIRONMENT=development ./deploy.sh
 
-      - name: Diff
+      - id: diff
+        name: Diff
         run: |
           echo "New DELTA"
           cat /tmp/new_delta.txt
@@ -82,7 +83,8 @@ jobs:
           cat /tmp/delta.txt
           echo "Diff"
           cat /tmp/diff.txt
+          echo "diff={{cat /tmp/diff.txt}}" >> "$GITHUB_OUTPUT"
       - uses: mshick/add-pr-comment@v2
         with:
           message: |
-            ${{ cat /tmp/diff.txt }}
+            ${{ steps.diff.outputs.diff }}
