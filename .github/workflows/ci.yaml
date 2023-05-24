@@ -83,8 +83,11 @@ jobs:
           cat /tmp/delta.txt
           echo "Diff"
           cat /tmp/diff.txt
-          echo "diff={{cat /tmp/diff.txt}}" >> "$GITHUB_OUTPUT"
+      - uses: pCYSl5EDgo/cat@master
+        id: diff
+        with:
+          path: /tmp/diff.txt
       - uses: mshick/add-pr-comment@v2
         with:
           message: |
-            ${{ steps.diff.outputs.diff }}
+            ${{ steps.diff.outputs.text }}
