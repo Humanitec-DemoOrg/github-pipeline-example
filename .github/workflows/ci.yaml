@@ -89,6 +89,7 @@ jobs:
           echo "$EOF" >> "$GITHUB_OUTPUT"
       - uses: mshick/add-pr-comment@v2
         with:
+          allow-repeats: true
           message: |
             ```json
             ${{ steps.diff.outputs.diff }}
