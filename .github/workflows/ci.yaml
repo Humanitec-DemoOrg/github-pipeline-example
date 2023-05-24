@@ -74,8 +74,7 @@ jobs:
           envsubst < overrides.debug.yaml.example > overrides.debug.yaml
           HUMANITEC_ENVIRONMENT=development ./deploy.sh
 
-      - id: diff
-        name: Diff
+      - name: Diff
         run: |
           echo "New DELTA"
           cat /tmp/new_delta.txt
