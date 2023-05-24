@@ -85,7 +85,7 @@ jobs:
       - name: Prep diffs
         id: diff
         run: |
-          echo ::set-output name=diff::$(cat /tmp/diff.txt)
+          echo "diff=$(cat /tmp/diff.txt)" >> $GITHUB_OUTPUT
       - uses: mshick/add-pr-comment@v2
         with:
           message: |
