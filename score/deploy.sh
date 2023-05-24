@@ -5,8 +5,9 @@ export DELTA=`score-humanitec delta --api-url $HUMANITEC_URL --token $HUMANITEC_
 echo "NEW DELTA"
 echo $DELTA
 echo $DELTA| jq > /tmp/new_delta.txt
+export DELTA_ID=`cat $DELTA | jq -r .id`
 
-echo "DELTA_ID={cat $DELTA | jq -r .id}" >> "$GITHUB_ENV"
+echo "DELTA_ID={$DELTA_ID}" >> "$GITHUB_ENV"
 
 echo "CURRENT SET"
 curl -s \
