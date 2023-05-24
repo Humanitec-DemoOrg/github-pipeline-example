@@ -73,12 +73,15 @@ jobs:
           echo $IMAGE_NAME
           envsubst < overrides.debug.yaml.example > overrides.debug.yaml
           HUMANITEC_ENVIRONMENT=development ./deploy.sh
-          echo "NEW Delta ID"
-          echo $DELTA_ID
 
       - name: Diff
         id: diff
         run: |
+          DELTA_ID=`cat /tmp/new_delta.txt | jq -r .id`
+          echo "DELTA_ID={$DELTA_ID}" >> "$GITHUB_ENV"
+          echo "New DELTA ID"
+          echo $DELTA_ID
+
           echo "New DELTA"
           cat /tmp/new_delta.txt
           echo "Existing DELTA"
