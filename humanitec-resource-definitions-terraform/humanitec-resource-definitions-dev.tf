@@ -31,12 +31,11 @@ EOL
     }
   }
 
-  criteria = [
-    {
-      app_id = humanitec_application.app.id
-      env_id = var.dev_env
-    }
-  ]
+  lifecycle {
+    ignore_changes = [
+      criteria
+    ]
+  }
 
 }
 
@@ -73,11 +72,10 @@ EOL
     }
   }
 
-  criteria = [
-    {
-      app_id = humanitec_application.app.id
-      env_id = var.dev_env
-    }
-  ]
+  lifecycle {
+    ignore_changes = [
+      criteria
+    ]
+  }
 
 }
