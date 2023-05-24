@@ -81,4 +81,12 @@ jobs:
           cat /tmp/delta.txt
           echo "Diff"
           cat /tmp/diff.txt
-          diff /tmp/delta.txt /tmp/new_delta.txt
+  command:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: mshick/add-pr-comment@v2
+        with:
+          message: |
+            **Hello MAIN**
