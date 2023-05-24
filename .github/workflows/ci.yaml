@@ -83,7 +83,7 @@ jobs:
           cat /tmp/delta.txt
           echo "Diff"
           cat /tmp/diff.txt
-
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
           echo "diff<<$EOF" >> "$GITHUB_OUTPUT"
           cat /tmp/diff.txt >> "$GITHUB_OUTPUT"
           echo "$EOF" >> "$GITHUB_OUTPUT"
