@@ -83,14 +83,37 @@ jobs:
           cat /tmp/delta.txt
           echo "Diff"
           cat /tmp/diff.txt
+
           EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
           echo "diff<<$EOF" >> "$GITHUB_OUTPUT"
           cat /tmp/diff.txt >> "$GITHUB_OUTPUT"
           echo "$EOF" >> "$GITHUB_OUTPUT"
+
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          echo "new<<$EOF" >> "$GITHUB_OUTPUT"
+          cat /tmp/new_delta.txt >> "$GITHUB_OUTPUT"
+          echo "$EOF" >> "$GITHUB_OUTPUT"
+
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          echo "current<<$EOF" >> "$GITHUB_OUTPUT"
+          cat /tmp/delta.txt >> "$GITHUB_OUTPUT"
+          echo "$EOF" >> "$GITHUB_OUTPUT"
+
       - uses: mshick/add-pr-comment@v2
         with:
           allow-repeats: true
           message: |
+            <details closed></summary>Current Delta</summary>
+            ```json
+            ${{ steps.diff.outputs.current }}
+            ```
+            </details>
+            <details closed></summary>New Delta</summary>
+            ```json
+            ${{ steps.diff.outputs.new }}
+            ```
+            </details>
+            Changes to the environment:
             ```json
             ${{ steps.diff.outputs.diff }}
             ```
