@@ -6,6 +6,8 @@ echo "NEW DELTA"
 echo $DELTA
 echo $DELTA| jq > /tmp/new_delta.txt
 
+echo "DELTA_ID={cat $DELTA | jq -r .id}" >> "$GITHUB_ENV"
+
 echo "CURRENT SET"
 curl -s \
   "https://api.humanitec.io/orgs/${HUMANITEC_ORG}/apps/${HUMANITEC_APP}/envs/${HUMANITEC_ENVIRONMENT}" \

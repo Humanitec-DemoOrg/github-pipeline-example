@@ -9,7 +9,7 @@ on:
     branches:
       - diff
 jobs:
-  test:
+  dev:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
@@ -73,6 +73,7 @@ jobs:
           echo $IMAGE_NAME
           envsubst < overrides.debug.yaml.example > overrides.debug.yaml
           HUMANITEC_ENVIRONMENT=development ./deploy.sh
+          echo $DELTA_ID
 
       - name: Diff
         id: diff
