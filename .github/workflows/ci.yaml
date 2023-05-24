@@ -82,13 +82,9 @@ jobs:
           cat /tmp/delta.txt
           echo "Diff"
           cat /tmp/diff.txt
-      - name: Prep diffs
-        id: diff
-        run: |
-          echo "diff=$(cat /tmp/diff.txt)" >> $GITHUB_OUTPUT
       - uses: mshick/add-pr-comment@v2
         with:
           message: |
             ```json
-            ${{ steps.diff.outputs.diff }}
+            $(cat /tmp/diff.txt)
             ```
