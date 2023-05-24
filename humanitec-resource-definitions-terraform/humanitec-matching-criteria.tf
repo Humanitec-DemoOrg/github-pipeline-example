@@ -23,7 +23,8 @@ resource "humanitec_resource_definition_criteria" "mariadb_prod" {
 }
 
 resource "humanitec_resource_definition_criteria" "namespace" {
-  res_id = "k8s-namespace"
-  app_id = humanitec_application.app.id
+  resource_definition_id = humanitec_resource_definition.namespace.id
+  res_id                 = "k8s-namespace"
+  app_id                 = humanitec_application.app.id
 }
 
