@@ -86,5 +86,5 @@ jobs:
         with:
           message: |
             ```json
-            {{(cat /tmp/diff.txt)}}
+            $IMAGE_NAME
             ```
