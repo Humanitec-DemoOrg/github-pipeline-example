@@ -103,16 +103,22 @@ jobs:
         with:
           allow-repeats: true
           message: |
-            <details closed><summary>Current Delta</summary>
+            <details closed>
+              <summary>Current Delta</summary>
+
             ```json
             ${{ steps.diff.outputs.current }}
             ```
             </details>
-            <details closed><summary>New Delta</summary>
+
+            <details closed>
+            <summary>New Delta</summary>
+
             ```json
             ${{ steps.diff.outputs.new }}
             ```
             </details>
+
             Changes to the environment:
             ```json
             ${{ steps.diff.outputs.diff }}
