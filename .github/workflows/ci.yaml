@@ -7,7 +7,7 @@ on:
       - diff
   pull_request:
     branches:
-      - diff
+      - main
 jobs:
   dev:
     runs-on: ubuntu-latest
