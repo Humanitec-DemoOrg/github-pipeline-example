@@ -29,10 +29,4 @@ EOL
     }
   }
 
-  criteria = [
-    {
-      app_id = humanitec_application.app.id
-      res_id = "k8s-namespace"
-    }
-  ]
 }
