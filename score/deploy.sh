@@ -6,7 +6,6 @@ echo "NEW DELTA"
 echo $DELTA
 echo $DELTA| jq > /tmp/new_delta.txt
 export DELTA_ID=`cat /tmp/new_delta.txt | jq -r .id`
-
 echo "DELTA_ID={$DELTA_ID}" >> "$GITHUB_ENV"
 
 echo "CURRENT SET"

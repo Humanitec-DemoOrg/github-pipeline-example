@@ -73,6 +73,7 @@ jobs:
           echo $IMAGE_NAME
           envsubst < overrides.debug.yaml.example > overrides.debug.yaml
           HUMANITEC_ENVIRONMENT=development ./deploy.sh
+          echo "NEW Delta ID"
           echo $DELTA_ID
 
       - name: Diff
