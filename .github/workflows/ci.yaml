@@ -11,7 +11,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-
+    permissions:
+      pull-requests: write
     env:
       HUMANITEC_ORG: ${{ secrets.HUMANITEC_ORG }}
       HUMANITEC_TOKEN: ${{ secrets.HUMANITEC_TOKEN }}
@@ -81,12 +82,7 @@ jobs:
           cat /tmp/delta.txt
           echo "Diff"
           cat /tmp/diff.txt
-  command:
-    runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
-    steps:
       - uses: mshick/add-pr-comment@v2
         with:
           message: |
-            **Hello MAIN**
+            ${{ cat /tmp/diff.txt }}
