@@ -1,6 +1,6 @@
 name: CI
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 on:
   workflow_dispatch:
@@ -140,6 +140,6 @@ jobs:
             ${{ steps.diff.outputs.diff }}
             ```
             Terraform:
-            ```json
+            ```
             ${{ steps.terraform.outputs.plan }}
             ```
