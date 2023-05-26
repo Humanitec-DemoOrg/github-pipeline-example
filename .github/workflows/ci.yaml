@@ -50,7 +50,9 @@ jobs:
           score-humanitec --version
 
       # Humanitec resource definitions, state stored in Terraform Cloud
-      - run: |
+      - name: Terraform
+        id: terraform
+        run: |
           cd humanitec-resource-definitions-terraform
           pwd && ls
           export TF_VAR_HUMANITEC_ORG=$HUMANITEC_ORG
@@ -58,8 +60,11 @@ jobs:
           export TF_VAR_HUMANITEC_APP=$HUMANITEC_APP
           chmod +x tfcloud.sh && ./tfcloud.sh
           terraform init -upgrade
-          terraform plan
-          terraform apply -auto-approve
+          terraform plan -out=/tmp/tfplan.json
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          echo "plan<<$EOF" >> "$GITHUB_OUTPUT"
+          cat /tmp/tfplan.json >> "$GITHUB_OUTPUT"
+          echo "$EOF" >> "$GITHUB_OUTPUT"
 
       # docker, and set the $IMAGE_NAME and use overrides later
       # currently using $IMAGE_NAME from the GitHub Variables
@@ -125,6 +130,11 @@ jobs:
             </details>
 
             Changes to the environment:
+            Humanitec:
             ```json
             ${{ steps.diff.outputs.diff }}
+            ```
+            Terraform:
+            ```json
+            ${{ steps.diff.outputs.plan }}
             ```
