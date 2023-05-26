@@ -61,6 +61,7 @@ jobs:
           chmod +x tfcloud.sh && ./tfcloud.sh
           terraform init -upgrade
           terraform plan -out=/tmp/tfplan.json
+
           EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
           echo "plan<<$EOF" >> "$GITHUB_OUTPUT"
           cat /tmp/tfplan.json >> "$GITHUB_OUTPUT"
