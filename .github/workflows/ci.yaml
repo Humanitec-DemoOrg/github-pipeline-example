@@ -66,10 +66,10 @@ jobs:
           terraform  show -no-color /tmp/tfplan.bin > /tmp/tfplan.txt
           cat /tmp/tfplan.txt
 
-          # EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
-          # echo "plan<<$EOF" >> "$GITHUB_OUTPUT"
-          # cat /tmp/tfplan.json >> "$GITHUB_OUTPUT"
-          # echo "$EOF" >> "$GITHUB_OUTPUT"
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          echo "plan<<$EOF" >> "$GITHUB_OUTPUT"
+          cat /tmp/tfplan.txt >> "$GITHUB_OUTPUT"
+          echo "$EOF" >> "$GITHUB_OUTPUT"
 
       # docker, and set the $IMAGE_NAME and use overrides later
       # currently using $IMAGE_NAME from the GitHub Variables
