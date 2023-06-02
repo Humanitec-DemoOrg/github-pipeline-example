@@ -16,12 +16,11 @@ resource "humanitec_resource_definition" "postgres_prod" {
     }
   }
 
-  criteria = [
-    {
-      app_id = humanitec_application.app.id
-      env_id = var.prod_env
-    }
-  ]
+  lifecycle {
+    ignore_changes = [
+      criteria
+    ]
+  }
 
 }
 
@@ -45,11 +44,10 @@ resource "humanitec_resource_definition" "mariadb_prod" {
 
   }
 
-  criteria = [
-    {
-      app_id = humanitec_application.app.id
-      env_id = var.prod_env
-    }
-  ]
+  lifecycle {
+    ignore_changes = [
+      criteria
+    ]
+  }
 
 }

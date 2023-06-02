@@ -1,15 +1,20 @@
 name: CI
-
+concurrency:
+  group: ${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
 on:
   workflow_dispatch:
   push:
     branches:
-      - dev
+      - diff
   pull_request:
+    branches:
+      - main
 jobs:
-  test:
+  dev:
     runs-on: ubuntu-latest
-
+    permissions:
+      pull-requests: write
     env:
       HUMANITEC_ORG: ${{ secrets.HUMANITEC_ORG }}
       HUMANITEC_TOKEN: ${{ secrets.HUMANITEC_TOKEN }}
@@ -18,7 +23,7 @@ jobs:
       TFC_TOKEN: ${{ secrets.TFC_TOKEN }}
       TFC_ORG: ${{ secrets.TFC_ORG }}
       TFC_WORKSPACE: ${{ secrets.TFC_WORKSPACE }}
-
+      IMAGE_NAME: ${{ vars.IMAGE_NAME }}
 
     steps:
       - uses: actions/checkout@v3
@@ -36,9 +41,9 @@ jobs:
           echo $GITHUB_PATH
       - run: |
           curl -L https://github.com/a8m/envsubst/releases/download/v1.4.2/envsubst-Linux-x86_64 -o ~/.bin/envsubst
-          curl -L https://github.com/score-spec/score-humanitec/releases/download/0.3.0-rc1/score-humanitec_0.3.0-rc1_linux_amd64.tar.gz -o /tmp/score.tar.gz
+          curl -L https://github.com/score-spec/score-humanitec/releases/download/0.5.0/score-humanitec_0.5.0_linux_amd64.tar.gz -o /tmp/score.tar.gz
           tar xvzf /tmp/score.tar.gz -C /tmp && cp /tmp/score-humanitec ~/.bin
-          curl -L https://releases.hashicorp.com/terraform/1.4.0/terraform_1.4.0_linux_amd64.zip -o /tmp/terraform.zip
+          curl -L https://releases.hashicorp.com/terraform/1.4.6/terraform_1.4.6_linux_amd64.zip -o /tmp/terraform.zip
           unzip /tmp/terraform.zip && mv terraform ~/.bin
           chmod +x ~/.bin
 
@@ -47,7 +52,9 @@ jobs:
           score-humanitec --version
 
       # Humanitec resource definitions, state stored in Terraform Cloud
-      - run: |
+      - name: Terraform
+        id: terraform
+        run: |
           cd humanitec-resource-definitions-terraform
           pwd && ls
           export TF_VAR_HUMANITEC_ORG=$HUMANITEC_ORG
@@ -55,21 +62,84 @@ jobs:
           export TF_VAR_HUMANITEC_APP=$HUMANITEC_APP
           chmod +x tfcloud.sh && ./tfcloud.sh
           terraform init -upgrade
-          terraform plan
-          terraform apply -auto-approve
-    
+          terraform plan -out /tmp/tfplan.bin
+          terraform  show -no-color /tmp/tfplan.bin > /tmp/tfplan.txt
+          cat /tmp/tfplan.txt
+
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          echo "plan<<$EOF" >> "$GITHUB_OUTPUT"
+          cat /tmp/tfplan.txt >> "$GITHUB_OUTPUT"
+          echo "$EOF" >> "$GITHUB_OUTPUT"
+
       # docker, and set the $IMAGE_NAME and use overrides later
+      # currently using $IMAGE_NAME from the GitHub Variables
+      # switch the image name to see changes for the diff
 
       # dev env
       - run: |
           cd score
-          chmod +x deploy_dev.sh
-          IMAGE_NAME="nginxdemos/hello:latest" envsubst < overrides.debug.yaml.example > overrides.debug.yaml
-          HUMANITEC_ENVIRONMENT=development ./deploy_dev.sh
+          chmod +x deploy.sh
+          # IMAGE_NAME="nginxdemos/hello:latest" envsubst < overrides.debug.yaml.example > overrides.debug.yaml
+          echo $IMAGE_NAME
+          envsubst < overrides.debug.yaml.example > overrides.debug.yaml
+          HUMANITEC_ENVIRONMENT=development ./deploy.sh
 
-      # prod env
-      - run: |
-          cd score
-          chmod +x deploy_prod.sh
-          IMAGE_NAME="nginxdemos/hello:latest" envsubst < overrides.debug.yaml.example > overrides.debug.yaml
-          HUMANITEC_ENVIRONMENT=production HUMANITEC_FROM_ENVIRONMENT=development ./deploy_prod.sh
+      - name: Diff
+        id: diff
+        run: |
+          DELTA_ID=`cat /tmp/new_delta.txt | jq -r .id`
+          echo "DELTA_ID={$DELTA_ID}" >> "$GITHUB_ENV"
+          echo "New DELTA ID"
+          echo $DELTA_ID
+
+          echo "New DELTA"
+          cat /tmp/new_delta.txt
+          echo "Existing DELTA"
+          cat /tmp/delta.txt
+          echo "Diff"
+          cat /tmp/diff.txt
+
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          echo "diff<<$EOF" >> "$GITHUB_OUTPUT"
+          cat /tmp/diff.txt >> "$GITHUB_OUTPUT"
+          echo "$EOF" >> "$GITHUB_OUTPUT"
+
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          echo "new<<$EOF" >> "$GITHUB_OUTPUT"
+          cat /tmp/new_delta.txt >> "$GITHUB_OUTPUT"
+          echo "$EOF" >> "$GITHUB_OUTPUT"
+
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          echo "current<<$EOF" >> "$GITHUB_OUTPUT"
+          cat /tmp/delta.txt >> "$GITHUB_OUTPUT"
+          echo "$EOF" >> "$GITHUB_OUTPUT"
+
+      - uses: mshick/add-pr-comment@v2
+        with:
+          allow-repeats: true
+          message: |
+            <details closed>
+              <summary>Current Delta</summary>
+
+            ```json
+            ${{ steps.diff.outputs.current }}
+            ```
+            </details>
+
+            <details closed>
+            <summary>New Delta</summary>
+
+            ```json
+            ${{ steps.diff.outputs.new }}
+            ```
+            </details>
+
+            Changes to the environment:
+            Humanitec:
+            ```json
+            ${{ steps.diff.outputs.diff }}
+            ```
+            Terraform:
+            ```
+            ${{ steps.terraform.outputs.plan }}
+            ```
